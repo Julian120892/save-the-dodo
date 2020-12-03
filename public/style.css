@@ -1,0 +1,12 @@
+body {
+    background-color: hotpink;
+}
+
+p {
+    visibility: hidden;
+    color: red;
+}
+
+.visible {
+    visibility: visible;
+}
