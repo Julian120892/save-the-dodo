@@ -10,3 +10,7 @@ p {
 .visible {
     visibility: visible;
 }
+
+canvas {
+    background-color: palevioletred;
+}

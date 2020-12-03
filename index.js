@@ -6,11 +6,11 @@ const db = require("./db");
 const hb = require("express-handlebars");
 const cookieParser = require("cookie-parser");
 
-app.use(cookieParser());
-
 //set up handlebars
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
+
+app.use(cookieParser());
 
 //middlewear check requests
 app.use((req, res, next) => {
@@ -19,6 +19,8 @@ app.use((req, res, next) => {
     console.log("--------------");
     next();
 });
+
+app.use(express.urlencoded({ extended: false }));
 
 //static Files
 app.use(express.static(__dirname + "/public"));
@@ -35,12 +37,24 @@ app.get("/petition", (req, res) => {
     }
 });
 
-//post /petition
+//POST /petition
 app.post("/petition", (req, res) => {
-    //get values
-    console.log("a Post request to /petition was made");
-    res.cookie("signed", "signed");
+    const { firstName, lastName } = req.body;
+    console.log("a Post request to /petition was made", firstName, lastName);
     res.redirect("/thanks");
+    db.addUserData(firstName, lastName)
+        .then(() => {
+            console.log("new signing");
+            res.cookie("signed", "signed");
+
+            res.sendStatus(200);
+        })
+        .catch((err) => {
+            console.log("error in db.addUserData", err);
+            res.render("petitionPage", {
+                layout: "main", //+error
+            });
+        });
 });
 
 //GET /thanks
@@ -57,33 +71,21 @@ app.get("/thanks", (req, res) => {
 
 //GET /signers
 app.get("/signers", (req, res) => {
-    res.render("signersPage", {
-        layout: "main",
-    });
-});
-
-//get route all cities from DB
-app.get("/firstName", (req, res) => {
-    db.getFirstName()
-        .then(({ rows }) => {
-            console.log("result from getCities: ", rows);
-            res.sendStatus(200);
-        })
-        .catch((err) => {
-            console.log("error in db.getCities ", err);
-        });
-});
-
-//post route for insert data into DB
-app.post("/addName", (req, res) => {
-    db.addName("juli", "Ri")
-        .then(() => {
-            console.log("it worked");
-            res.sendStatus(200);
-        })
-        .catch((err) => {
-            console.log("error in db.addName", err);
-        });
+    if (req.cookies.signed != "signed") {
+        console.log("not filled out, redirected to petition");
+        res.redirect("/petition");
+    } else {
+        db.getUsers()
+            .then(({ rows }) => {
+                res.render("signersPage", {
+                    layout: "main",
+                    rows,
+                });
+            })
+            .catch((err) => {
+                console.log("error in db.getUsers ", err);
+            });
+    }
 });
 
 app.listen(8080, () => console.log("Petition Server running on 8080..."));

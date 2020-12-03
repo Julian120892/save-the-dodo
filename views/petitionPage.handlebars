@@ -1,8 +1,10 @@
 <h1>I'm the petition Page</h1>
 
-<form method="POST">
+<form method="POST" action="/petition">
   <input type="text" id="firstName" name="firstName" placeholder="First Name"><br>
   <input type="text" id="lastName" name="lastName" placeholder="Last Name"><br>
+      <h3>Please Sign here with your mouse</h3>
+      <canvas id="signCanvas" width="300" height="100"></canvas>
       <input type="hidden" id="signature" name="signature"><br>
   <p id="warning">Something went wrong please try a diffrent Name!</p>    
     <button id="submitBTN">Sign Now!</button>

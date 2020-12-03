@@ -1,4 +1,4 @@
-console.log($);
+//console.log($);
 
 let submitButton = $("#submitBTN");
 let firstName = $("#firstName");
