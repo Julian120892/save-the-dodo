@@ -1,13 +1,29 @@
-<h1>I'm the petition Page</h1>
 
+
+<div class="explainer">
+<h1>"Nothing is extinct forever"</h1>
+<h3>Help us bring back the Dodo Bird from the dead.</h3>
+<br>
+<span>By signing this petition you will be one of the thousands <br> 
+of people who love big cubby Birds, that can't fly. Like pinguins <br> 
+just in fat. We want to get the scienes to do a little jurassic-magic <br> 
+and clone Dodo Birds back to life.</span>
+</div>
+
+<div class="Item">
 <form method="POST" action="/petition">
+  <h4>First Name</h4>
   <input type="text" id="firstName" name="firstName" placeholder="First Name"><br>
+   <h4>Last Name</h4>
   <input type="text" id="lastName" name="lastName" placeholder="Last Name"><br>
-      <h3>Please Sign here with your mouse</h3>
-      <canvas id="signCanvas" width="300" height="100"></canvas>
+  <br>
+      <h4>Please Sign with your mouse here:</h4>
+      <canvas id="signCanvas" width="350" height="100"></canvas>
       <input type="hidden" id="hiddenSig" name="hiddenSig"><br>
-      <input type="hidden" name="_csrf" value="{{csrfToken}}"><br>
 
-  <p id="warning">Something went wrong or you haven't filled out all the forms, please try a diffrent Name!</p>    
+  <p id="warning"><span>Something went wrong or you haven't filled out all the forms, please try a diffrent Name!</span></p>    
     <button id="submitBTN">Sign Now!</button>
+      <input type="hidden" name="_csrf" value="{{csrfToken}}"><br>
 </form>
+</div>
+

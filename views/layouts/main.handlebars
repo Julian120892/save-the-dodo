@@ -3,15 +3,42 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;500;700;900&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/style.css" />
-        <title>Portfolio Handlebars</title>
+        <title>Safe the Dodo</title>
     </head>
     <body>
-            <h5>Petition Page Header</h5>
 
+    <header>
+
+        <div>   
+            <img id="logo" src="/img/favpng_dodo-bird-clip-art.png" alt="dodo Logo">
+            <h2>Clone the Dodo Bird</h2>
+        </div>
+
+
+        <nav>
+            <ul>
+                <li><a href="#">Info</a></li>
+                <li><a href="/petition">Sign Up</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="teaser">
+    </div>
+
+    <div class="container">
         {{{body}}}
-                <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    </div>
 
+        <footer>
+        <span>Copyright by Dodolovers for the Future, 2006</span>
+        </footer>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="/script.js"></script>
     </body>
 </html>

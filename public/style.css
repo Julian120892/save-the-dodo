@@ -1,10 +1,85 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    background-color: hotpink;
+    font-family: "Rubik", sans-serif;
+    background-color: #f55142;
+    color: #2e2929;
+    border: 15px solid #2e2929;
+}
+
+span {
+    font-size: 0.8rem;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+header {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 3px solid #2e2929;
+    padding: 20px;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+}
+
+header div {
+    display: flex;
+    align-items: center;
+}
+
+#logo {
+    width: 35px;
+    margin-right: 25px;
+}
+
+header h3 {
+    margin-left: 1px;
+}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+    margin-right: 20px;
+}
+
+nav li {
+    margin-left: 15px;
+}
+
+.teaser {
+    height: 40vh;
+    background-image: url("/img/dodoheader.png");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 90%;
+    margin: 10px;
+}
+
+a {
+    color: #2e2929;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #453d3d;
+    border-bottom: 2.5px solid #453d3d;
 }
 
 p {
     visibility: hidden;
-    color: red;
+    color: #4d1515;
 }
 
 .visible {
@@ -12,10 +87,71 @@ p {
 }
 
 canvas {
-    background-color: palevioletred;
+    margin-top: 10px;
+    background-color: #ff5f4f;
+    border-radius: 25px;
+    margin-left: -5px;
 }
 
 #user-signing {
-    background-color: palevioletred;
+    background-color: #ff5f4f;
     width: 300px;
+    border-radius: 25px;
+}
+
+.Item {
+    border: 3px solid #2e2929;
+    text-align: left;
+    padding: 40px;
+    width: 55%;
+    margin-bottom: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+}
+.Item h4 {
+    margin-bottom: 5px;
+}
+
+.Item input {
+    margin-bottom: 10px;
+    background-color: #f55142;
+    border: 3px solid #2e2929;
+    font-family: "Rubik", sans-serif;
+    color: #2e2929;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+::placeholder {
+    color: #453d3d;
+}
+
+.explainer {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#submitBTN {
+    background-color: #f55142;
+    border: 3px solid #2e2929;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    font-family: "Rubik", sans-serif;
+    border-radius: 10px;
+}
+
+#submitBTN:hover {
+    color: #453d3d;
+    border: 3px solid #453d3d;
+    background-color: #ff5f4f;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
 }
