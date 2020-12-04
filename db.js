@@ -15,7 +15,7 @@ module.exports.getCount = () => {
 };
 
 module.exports.addUserData = (firstName, lastName) => {
-    const q = `INSERT INTO petition (first, last) VALUES ($1, $2)`;
+    const q = `INSERT INTO signatures (first, last) VALUES ($1, $2)`;
     const params = [firstName, lastName];
 
     return db.query(q, params);

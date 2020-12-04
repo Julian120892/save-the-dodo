@@ -41,19 +41,18 @@ app.get("/petition", (req, res) => {
 app.post("/petition", (req, res) => {
     const { firstName, lastName } = req.body;
     console.log("a Post request to /petition was made", firstName, lastName);
-    res.redirect("/thanks");
+
     db.addUserData(firstName, lastName)
         .then(() => {
             console.log("new signing");
             res.cookie("signed", "signed");
-
-            res.sendStatus(200);
+            res.redirect("/thanks");
         })
         .catch((err) => {
             console.log("error in db.addUserData", err);
-            res.render("petitionPage", {
-                layout: "main", //+error
-            });
+            //res.render("petitionPage", {
+            //    layout: "main", //+error
+            //});
         });
 });
 
