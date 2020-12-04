@@ -62,8 +62,13 @@ app.get("/thanks", (req, res) => {
         console.log("not filled out, redirected to petition");
         res.redirect("/petition");
     } else {
-        res.render("thanksPage", {
-            layout: "main",
+        db.getCount().then((result) => {
+            let countOfUsers = result.rows[0].count;
+            console.log("user Count: ", countOfUsers);
+            res.render("thanksPage", {
+                layout: "main",
+                countOfUsers,
+            });
         });
     }
 });
@@ -76,6 +81,7 @@ app.get("/signers", (req, res) => {
     } else {
         db.getUsers()
             .then(({ rows }) => {
+                console.log("rows: ", rows);
                 res.render("signersPage", {
                     layout: "main",
                     rows,

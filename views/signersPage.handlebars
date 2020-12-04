@@ -2,8 +2,8 @@
 
 <h2>This is everyone who signed already.</h2>
 <div>
-    {{#rows}}
-        <p>{{this.rows}}</p>
-    {{/rows}}
+    {{#each rows}}
+        <h5>{{first}} {{last}}</h5>
+    {{/each}}
 </div>
 
