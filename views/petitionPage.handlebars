@@ -5,7 +5,9 @@
   <input type="text" id="lastName" name="lastName" placeholder="Last Name"><br>
       <h3>Please Sign here with your mouse</h3>
       <canvas id="signCanvas" width="300" height="100"></canvas>
-      <input type="hidden" id="signature" name="signature"><br>
-  <p id="warning">Something went wrong please try a diffrent Name!</p>    
+      <input type="hidden" id="hiddenSig" name="hiddenSig"><br>
+      <input type="hidden" name="_csrf" value="{{csrfToken}}"><br>
+
+  <p id="warning">Something went wrong or you haven't filled out all the forms, please try a diffrent Name!</p>    
     <button id="submitBTN">Sign Now!</button>
 </form>

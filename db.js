@@ -14,9 +14,22 @@ module.exports.getCount = () => {
     return db.query(q);
 };
 
-module.exports.addUserData = (firstName, lastName) => {
-    const q = `INSERT INTO signatures (first, last) VALUES ($1, $2)`;
-    const params = [firstName, lastName];
+module.exports.addUserData = (firstName, lastName, signature) => {
+    const q = `
+    INSERT INTO signatures (first, last, signature) 
+    VALUES ($1, $2, $3)
+    RETURNING id
+    `;
+    const params = [firstName, lastName, signature];
 
     return db.query(q, params);
+};
+
+module.exports.getUserSignature = (id) => {
+    const q = `
+    SELECT signature 
+    FROM signatures
+    WHERE id = '${id}'
+    `;
+    return db.query(q);
 };

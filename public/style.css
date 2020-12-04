@@ -14,3 +14,8 @@ p {
 canvas {
     background-color: palevioletred;
 }
+
+#user-signing {
+    background-color: palevioletred;
+    width: 300px;
+}
