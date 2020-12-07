@@ -1,0 +1,35 @@
+<div class="explainer">
+<h1>"Nothing is extinct forever"</h1>
+<h3>Help us bring back the Dodo Bird from the dead.</h3>
+<br>
+<span>By signing this petition you will be one of the thousands <br> 
+of people who love big cubby Birds, that can't fly. Like pinguins <br> 
+just in fat. We want to get the scienes to do a little jurassic-magic <br> 
+and clone Dodo Birds back to life.</span>
+</div>
+
+
+<div class="Item">
+<form method="POST" action="/register">
+<h2>Please register to support us:</h2>
+<br>
+<br>
+  <h4>First Name</h4>
+  <input type="text" id="firstName" name="firstName" placeholder="First Name"><br>
+   <h4>Last Name</h4>
+  <input type="text" id="lastName" name="lastName" placeholder="Last Name"><br>
+  <br>
+  <h4>Your Email Adress</h4>
+  <input type="text" id="email" name="email" placeholder="Em@il" pattern="(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])" title="Please enter a valid Email Adress."><br>
+  <h4>Your password</h4>
+<input type="password" id="password" name="password" placeholder="Enter a Password" pattern="(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])
+" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters">
+  <br>
+      
+
+  <p id="warning"><span>Something went wrong or you haven't filled out all the forms, please try a diffrent Name!</span></p>    
+    <button id="submitBTN">Sign Now!</button>
+          <input type="hidden" name="_csrf" value="{{csrfToken}}"><br>
+
+</form>
+</div>
