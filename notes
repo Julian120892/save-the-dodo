@@ -81,3 +81,24 @@ module.exports.getUserSignature = (id) => {
     `;
     return db.query(q);
 };
+
+
+
+
+
+
+
+
+
+
+
+
+SELECT
+users.first,
+users.last,
+user_profiles.age,
+user_profiles.city,
+user_profiles.url
+FROM
+users
+INNER JOIN user_profiles ON users.id = user_profiles.user_id;

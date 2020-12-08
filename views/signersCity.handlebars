@@ -1,0 +1,17 @@
+
+
+<div class="Item">
+<h1>We are saving the Dodo Bird together!</h1>
+<br>
+<h2>People in <u>{{rows.0.city}}</u>  who also signed the petition:</h2>
+<br>
+
+<ul>
+
+    {{#each rows}}
+        <li><a href="{{url}}">{{first}} {{last}}</a> ({{age}})</li><br>
+    {{/each}}
+
+</ul>
+</div>
+

@@ -112,7 +112,7 @@ app.post("/register", (req, res) => {
                     console.log("added to DB");
                     req.session.id = id.rows[0].id;
                     req.session.signed = "false";
-                    res.redirect("/petition");
+                    res.redirect("/profile");
                 })
                 .catch((err) => {
                     console.log("error in db.register", err);
@@ -134,19 +134,34 @@ app.get("/login", (req, res) => {
 
 //POST Log In
 app.post("/login", (req, res) => {
-    //console.log(req.body);
     const { email, password } = req.body;
     db.LogIn(email, password)
         .then((hash) => {
             if (compare(password, hash.rows[0].password)) {
-                req.session.logged = "true";
-                console.log(hash.rows);
-                req.session.id = 22; //put user_id in here!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                if (req.session.signed != "signed") {
-                    res.redirect("/petition");
-                } else {
-                    res.redirect("/thanks");
-                }
+                //console.log("passwordarray: ", hash.rows);
+                //console.log("email: ", req.body.email);
+                let currentEmail = req.body.email;
+                db.getUserId(currentEmail)
+                    .then((result) => {
+                        //set cookie with ID
+                        req.session.id = result.rows[0].id;
+                        //set "signed cookie" depinding of signed value
+                        db.getUserSignature(result.rows[0].id).then(
+                            (result) => {
+                                //console.log(result.rows[0].signature);
+                                if (result.rows[0].signature) {
+                                    //console.log("already signed");
+                                    req.session.signed = "signed";
+                                    res.redirect("/thanks");
+                                } else {
+                                    res.redirect("/thanks");
+                                }
+                            }
+                        );
+                    })
+                    .catch((err) => {
+                        console.log("error in db.getUserId", err);
+                    });
             } else {
                 console.log("wrong password");
                 //something went wrong new passowrd please
@@ -155,6 +170,44 @@ app.post("/login", (req, res) => {
         .catch((err) => {
             console.log("error in db.login", err);
         });
+});
+
+/////////////////////////////////////////////////////////////////////////
+//////////////////////////Profile////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+//GET profile
+app.get("/profile", (req, res) => {
+    res.render("profilePage", {
+        layout: "main",
+    });
+});
+
+//POST profile
+app.post("/profile", (req, res) => {
+    if (
+        req.body.website.startsWith("http") ||
+        req.body.website.startsWith("https")
+    ) {
+        console.log("website true");
+        let age = req.body.age;
+        let city = req.body.city;
+        let url = req.body.website;
+        let id = req.session.id;
+
+        db.addUserData(age, city, url, id)
+            .then(() => {
+                if (req.session.signed != "signed") {
+                    res.redirect("/petition");
+                }
+                //console.log(result.rows[0]);
+            })
+            .catch((err) => {
+                console.log("error in db.addUserData and getCount", err);
+            });
+    } else {
+        console.log("no website");
+        //db add error
+    }
 });
 
 /////////////////////////////////////////////////////////////////////////
@@ -207,7 +260,32 @@ app.get("/signers", (req, res) => {
                 });
             })
             .catch((err) => {
-                console.log("error in db.getUsers ", err);
+                console.log("error in signers db.getUsers ", err);
+            });
+    }
+});
+
+/////////////////////////////////////////////////////////////////////////
+//////////////////////////City Signers///////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+
+//GET /signers/:city
+app.get("/signers/:city", (req, res) => {
+    if (req.session.signed != "signed") {
+        console.log("not filled out, redirected to petition");
+        res.redirect("/petition");
+    } else {
+        let city = req.params.city;
+        console.log(city);
+        db.getUserFromCity(city)
+            .then(({ rows }) => {
+                res.render("signersCity", {
+                    layout: "main",
+                    rows,
+                });
+            })
+            .catch((err) => {
+                console.log("error in signers db.getUsers ", err);
             });
     }
 });
@@ -217,8 +295,8 @@ app.get("/signers", (req, res) => {
 /////////////////////////////////////////////////////////////////////////
 
 //GET /
-app.get("*", (req, res) => {
-    res.redirect("/register");
-});
+// app.get("*", (req, res) => {
+//     res.redirect("/register");
+// });
 
 app.listen(8080, () => console.log("Petition Server running on 8080..."));

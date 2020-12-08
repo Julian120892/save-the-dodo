@@ -6,8 +6,13 @@
 <h2>All these people have signed to save their <br> 
 favorite extinct Bird:</h2>
 <br>
+
+<ul>
+
     {{#each rows}}
-        <h5>{{first}} {{last}}</h5>
+        <li><a href="{{url}}">{{first}} {{last}} ({{age}}), </a><a href="signers/{{city}}">{{city}}</a></li><br>
     {{/each}}
+
+</ul>
 </div>
 

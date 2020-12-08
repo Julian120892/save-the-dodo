@@ -1,0 +1,21 @@
+<div class="Item">
+    <h2 width="100%">Add Profile Infos</h2>
+    <span>If you want, you can put your Infos here, so other users know where and how to conntect you.</span>
+<br>
+<br>
+<form method="POST" action="/profile">
+  <h4>Your Age</h4>
+  <input type="number" id="age" name="age" placeholder="Put your Age here"><br>
+  <h4>Your City</h4>
+<input type="text" id="city" name="city" placeholder="Where do you live?">
+  <h4>Your Homepage</h4>
+<input type="text" id="website" name="website" placeholder="Do you have a webpage?">
+  <br>
+      
+
+  <p id="warning"><span>Your Email Adress or Password was wrong, please try again.</span></p>    
+    <button id="submitBTN">Add to your Profile!</button>
+          <input type="hidden" name="_csrf" value="{{csrfToken}}"><br>
+
+</form>
+</div>
