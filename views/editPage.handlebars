@@ -1,0 +1,31 @@
+<div class="Item">
+    <h2 width="100%">Edit your Profile Infos</h2>
+<br>
+<br>
+<form method="POST" action="/edit">
+  <h4>First Name</h4>
+  <input type="text" id="firstName" name="firstName" value="{{rows.0.first}}" placeholder="First Name" pattern="[a-zA-Z]+" title="No Numbers allowed"><br>
+   <h4>Last Name</h4>
+  <input type="text" id="lastName" name="lastName" value="{{rows.0.last}}" placeholder="Last Name" pattern="[a-zA-Z]+" title="No Numbers allowed"><br>
+  <br>
+  <h4>Your Email Adress</h4>
+  <input type="email" id="email" name="email" value="{{rows.0.email}}" placeholder="Em@il"><br>
+  <h4>Your password</h4>
+<input type="password" id="password" name="password" placeholder="******"> <!--pattern='(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"' title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"-->
+  <br>
+  <br>
+  <h4>Your Age</h4>
+  <input type="number" id="age" name="age" value="{{rows.0.age}}" placeholder="Put your Age here"><br>
+  <h4>Your City</h4>
+<input type="text" id="city" name="city" value="{{rows.0.city}}" placeholder="Where do you live?">
+  <h4>Your Homepage</h4>
+<input type="text" id="website" name="website" value="{{rows.0.url}}" placeholder="Do you have a webpage?">
+  <br>
+      
+
+  <p id="warning"><span>Something went wrong, please try again.</span></p>    
+    <button id="submitBTN">Send</button>
+          <input type="hidden" name="_csrf" value="{{csrfToken}}"><br>
+
+</form>
+</div>

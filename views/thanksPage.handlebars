@@ -9,6 +9,21 @@
 <img src="{{savedSigning}}" alt="">
 </div>
 <br>
-<a href="/signers"> --> See who else signed the Petition</a>
+<a href="/signers">See who else signed the Petition</a>
+
+<br>
+<br>
+<form action="/thanks">
+<button id="submitBTN">Delete Signature</button>
+<input type="hidden" name="_csrf" value="{{csrfToken}}"><br>
+</form>
+
+<br>
+
+<form action="/edit">
+<button id="submitBTN">Edit Profile</button>
+</form>
+
+
 
 </div>

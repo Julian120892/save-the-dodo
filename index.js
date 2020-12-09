@@ -48,7 +48,6 @@ app.use(express.static(__dirname + "/public"));
 //GET /petition
 app.get("/petition", (req, res) => {
     if (req.session.signed == "signed") {
-        console.log("allready filled out, redirected to thanks");
         res.redirect("/thanks");
     } else {
         res.render("petitionPage", {
@@ -63,7 +62,6 @@ app.post("/petition", (req, res) => {
     console.log("id: ", user_id);
 
     const { hiddenSig } = req.body;
-    //console.log("a Post request to /petition was made", req.body);
     if (hiddenSig == "") {
         return;
     } else {
@@ -72,7 +70,6 @@ app.post("/petition", (req, res) => {
             .then(() => {
                 console.log("added to DB");
                 req.session.signed = "signed";
-                //req.session.id = id;
                 res.redirect("/petition");
             })
             .catch((err) => {
@@ -95,8 +92,6 @@ app.get("/register", (req, res) => {
 //POST /register
 app.post("/register", (req, res) => {
     const { firstName, lastName, email, password } = req.body;
-    //console.log("a Post request to /register was made", req.body);
-
     if (firstName == "") {
         return;
     } else if (lastName == "") {
@@ -109,7 +104,7 @@ app.post("/register", (req, res) => {
         hash(password).then((hash) => {
             db.newUser(firstName, lastName, email, hash)
                 .then((id) => {
-                    console.log("added to DB");
+                    console.log("added User to Data Base");
                     req.session.id = id.rows[0].id;
                     req.session.signed = "false";
                     res.redirect("/profile");
@@ -138,19 +133,13 @@ app.post("/login", (req, res) => {
     db.LogIn(email, password)
         .then((hash) => {
             if (compare(password, hash.rows[0].password)) {
-                //console.log("passwordarray: ", hash.rows);
-                //console.log("email: ", req.body.email);
                 let currentEmail = req.body.email;
                 db.getUserId(currentEmail)
                     .then((result) => {
-                        //set cookie with ID
                         req.session.id = result.rows[0].id;
-                        //set "signed cookie" depinding of signed value
                         db.getUserSignature(result.rows[0].id).then(
                             (result) => {
-                                //console.log(result.rows[0].signature);
                                 if (result.rows[0].signature) {
-                                    //console.log("already signed");
                                     req.session.signed = "signed";
                                     res.redirect("/thanks");
                                 } else {
@@ -188,7 +177,6 @@ app.post("/profile", (req, res) => {
         req.body.website.startsWith("http") ||
         req.body.website.startsWith("https")
     ) {
-        console.log("website true");
         let age = req.body.age;
         let city = req.body.city;
         let url = req.body.website;
@@ -199,7 +187,6 @@ app.post("/profile", (req, res) => {
                 if (req.session.signed != "signed") {
                     res.redirect("/petition");
                 }
-                //console.log(result.rows[0]);
             })
             .catch((err) => {
                 console.log("error in db.addUserData and getCount", err);
@@ -216,17 +203,14 @@ app.post("/profile", (req, res) => {
 //GET /thanks
 app.get("/thanks", (req, res) => {
     if (req.session.signed != "signed") {
-        console.log("not filled out, redirected to petition");
         res.redirect("/petition");
     } else {
         db.getCount()
             .then((result) => {
                 let countOfUsers = result.rows[0].count;
                 let newID = req.session.id;
-                console.log("newID: ", newID);
 
                 db.getUserSignature(newID).then((result) => {
-                    console.log("result: ", result.rows[0]);
                     let savedSigning = result.rows[0].signature;
                     res.render("thanksPage", {
                         layout: "main",
@@ -241,6 +225,61 @@ app.get("/thanks", (req, res) => {
     }
 });
 
+app.post("/thanks", (req, res) => {
+    console.log("a post request to thanks was made");
+});
+
+/////////////////////////////////////////////////////////////////////////
+//////////////////////////Edit Profile////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+//GET edit
+app.get("/edit", (req, res) => {
+    db.getSpecificUser(req.session.id).then(({ rows }) => {
+        res.render("editPage", {
+            layout: "main",
+            rows,
+        });
+    });
+});
+
+app.post("/edit", (req, res) => {
+    const {
+        firstName,
+        lastName,
+        email,
+        password,
+        age,
+        city,
+        website,
+    } = req.body;
+    const id = req.session.id;
+
+    if (password != "") {
+        console.log("password changed");
+        hash(password)
+            .then((hash) => {
+                db.updatePasswortAndUser(id, firstName, lastName, email, hash);
+            })
+            .catch((err) => {
+                console.log("error in db.updatePasswordAndUser ", err);
+            });
+    } else {
+        console.log("just data changed");
+        //IF no password {change first, last, email}
+        db.updateUser(id, firstName, lastName, email).catch((err) => {
+            console.log("error in signers db.getUsers ", err);
+        });
+    }
+    //console.log(age, city, website, id);
+    db.updateUserProfile(age, city, website, id)
+        .catch((err) => {
+            console.log("error in db.updateUserProfile ", err);
+        })
+        .then(() => {
+            res.redirect("/thanks");
+        });
+});
+
 /////////////////////////////////////////////////////////////////////////
 //////////////////////////Signers ///////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
@@ -248,12 +287,10 @@ app.get("/thanks", (req, res) => {
 //GET /signers
 app.get("/signers", (req, res) => {
     if (req.session.signed != "signed") {
-        console.log("not filled out, redirected to petition");
         res.redirect("/petition");
     } else {
         db.getUsers()
             .then(({ rows }) => {
-                console.log("rows: ", rows);
                 res.render("signersPage", {
                     layout: "main",
                     rows,
@@ -272,11 +309,9 @@ app.get("/signers", (req, res) => {
 //GET /signers/:city
 app.get("/signers/:city", (req, res) => {
     if (req.session.signed != "signed") {
-        console.log("not filled out, redirected to petition");
         res.redirect("/petition");
     } else {
         let city = req.params.city;
-        console.log(city);
         db.getUserFromCity(city)
             .then(({ rows }) => {
                 res.render("signersCity", {
@@ -299,4 +334,6 @@ app.get("/signers/:city", (req, res) => {
 //     res.redirect("/register");
 // });
 
-app.listen(8080, () => console.log("Petition Server running on 8080..."));
+app.listen(process.env.PORT || 8080, () =>
+    console.log("Petition Server running on 8080...")
+);
