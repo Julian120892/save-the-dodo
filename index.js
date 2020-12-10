@@ -137,16 +137,24 @@ app.post("/login", (req, res) => {
                 db.getUserId(currentEmail)
                     .then((result) => {
                         req.session.id = result.rows[0].id;
-                        db.getUserSignature(result.rows[0].id).then(
-                            (result) => {
-                                if (result.rows[0].signature) {
+                        db.getUserSignature(result.rows[0].id)
+                            .then((result) => {
+                                ///////if there is no signature we crash
+                                //if (result.rows[0].signature) {
+                                if (result.rows[0] !== undefined) {
+                                    console.log(result.rows[0]);
                                     req.session.signed = "signed";
                                     res.redirect("/thanks");
                                 } else {
-                                    res.redirect("/thanks");
+                                    res.redirect("/petition");
                                 }
-                            }
-                        );
+                            })
+                            .catch((err) => {
+                                console.log(
+                                    "error in .then of getUserSig",
+                                    err
+                                );
+                            });
                     })
                     .catch((err) => {
                         console.log("error in db.getUserId", err);
@@ -159,6 +167,15 @@ app.post("/login", (req, res) => {
         .catch((err) => {
             console.log("error in db.login", err);
         });
+});
+/////////////////////////////////////////////////////////////////////////
+//////////////////////////Log OUT////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+//GET Log Out
+app.post("/logout", (req, res) => {
+    console.log("hello there");
+    req.session.id = "false";
+    res.redirect("/login");
 });
 
 /////////////////////////////////////////////////////////////////////////
@@ -175,7 +192,8 @@ app.get("/profile", (req, res) => {
 app.post("/profile", (req, res) => {
     if (
         req.body.website.startsWith("http") ||
-        req.body.website.startsWith("https")
+        req.body.website.startsWith("https") ||
+        req.body.website == " "
     ) {
         let age = req.body.age;
         let city = req.body.city;
@@ -186,6 +204,8 @@ app.post("/profile", (req, res) => {
             .then(() => {
                 if (req.session.signed != "signed") {
                     res.redirect("/petition");
+                } else {
+                    res.redirect("/thanks");
                 }
             })
             .catch((err) => {
@@ -211,6 +231,9 @@ app.get("/thanks", (req, res) => {
                 let newID = req.session.id;
 
                 db.getUserSignature(newID).then((result) => {
+                    if (!result.rows[0]) {
+                        return;
+                    }
                     let savedSigning = result.rows[0].signature;
                     res.render("thanksPage", {
                         layout: "main",
@@ -277,6 +300,25 @@ app.post("/edit", (req, res) => {
         })
         .then(() => {
             res.redirect("/thanks");
+        });
+});
+
+/////////////////////////////////////////////////////////////////////////
+//////////////////////////Delete Sig/////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+
+// POST /
+delete app.post("/delete", (req, res) => {
+    console.log("delete signature");
+    let id = req.session.id;
+
+    db.deleteSignature(id)
+        .then((result) => {
+            req.session.signed = null;
+            res.redirect("/thanks");
+        })
+        .catch((err) => {
+            console.log("error in delete signature", err);
         });
 });
 

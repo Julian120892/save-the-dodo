@@ -106,6 +106,14 @@ module.exports.getUserSignature = (user_id) => {
     return db.query(q);
 };
 
+module.exports.deleteSignature = (user_id) => {
+    const q = `
+    DELETE FROM signatures
+    WHERE user_id = '${user_id}'
+    `;
+    return db.query(q);
+};
+
 module.exports.getCount = () => {
     const q = `SELECT COUNT (*) FROM signatures`;
     return db.query(q);

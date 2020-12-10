@@ -22,8 +22,10 @@
             <ul>
                 <li><a href="#">Info</a></li>
                 <li><a href="/petition">Sign</a></li>
-                <li><a href="/login">Log In</a></li>
-
+                <form action="/logout" method="POST">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}"><br>
+                <li><button>Logout</button></li>
+                </form>
             </ul>
         </nav>
     </header>
