@@ -151,6 +151,21 @@ canvas {
     background-color: #ff5f4f;
 }
 
+#logBTN {
+    background-color: #f55142;
+    font-family: "Rubik", sans-serif;
+    font-size: 1rem;
+    text-decoration: none;
+    border: none;
+    color: #2e2929;
+    border-bottom: 2.5px solid #f55142;
+}
+
+#logBTN:hover {
+    color: #453d3d;
+    border-bottom: 2.5px solid #453d3d;
+}
+
 footer {
     text-align: center;
     padding: 20px;
