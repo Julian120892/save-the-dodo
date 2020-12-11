@@ -38,61 +38,46 @@ app.use((req, res, next) => {
 app.use(express.static(__dirname + "/public"));
 
 //GET /petition
-app.get(
-    "/petition",
-    requireLoggedInUser,
-    requireUnsignedPetition,
-    (req, res) => {
-        res.render("petitionPage", {
-            layout: "main",
-        });
-    }
-);
+app.get("/petition", (req, res) => {
+    res.render("petitionPage", {
+        layout: "main",
+    });
+});
 
 //POST /petition
-app.post(
-    "/petition",
-    requireLoggedInUser,
-    requireUnsignedPetition,
-    (req, res) => {
-        let user_id = req.session.id;
-        console.log("id: ", user_id);
+app.post("/petition", (req, res) => {
+    let user_id = req.session.id;
+    console.log("id: ", user_id);
 
-        const { hiddenSig } = req.body;
-        if (hiddenSig == "") {
-            return;
-        } else {
-            console.log("id: ", user_id);
-            db.addUserSig(hiddenSig, user_id)
-                .then(() => {
-                    console.log("added to DB");
-                    req.session.signed = true;
-                    res.redirect("/petition");
-                })
-                .catch((err) => {
-                    console.log("error in db.addUserSig", err);
-                });
-        }
+    const { hiddenSig } = req.body;
+    if (hiddenSig == "") {
+        return;
+    } else {
+        console.log("id: ", user_id);
+        db.addUserSig(hiddenSig, user_id)
+            .then(() => {
+                console.log("added to DB");
+                req.session.signed = true;
+                res.redirect("/thanks");
+            })
+            .catch((err) => {
+                console.log("error in db.addUserSig", err);
+            });
     }
-);
+});
 
 //GET /register
-app.get(
-    "/register",
-    requireLoggedOutUser,
-    requireUnsignedPetition,
-    (req, res) => {
-        res.render("registerPage", {
-            layout: "main",
-        });
-    }
-);
+app.get("/register", requireLoggedOutUser, (req, res) => {
+    res.render("registerPage", {
+        layout: "main",
+    });
+});
 
 //POST /register
 app.post(
     "/register",
     requireLoggedOutUser,
-    requireUnsignedPetition,
+
     (req, res) => {
         const { firstName, lastName, email, password } = req.body;
         if (firstName == "") {
@@ -107,7 +92,7 @@ app.post(
             hash(password).then((hash) => {
                 db.newUser(firstName, lastName, email, hash)
                     .then((id) => {
-                        console.log("added User to Data Base");
+                        console.log("added User to Data Base", id.rows[0].id);
                         req.session.id = id.rows[0].id;
                         req.session.signed = true;
                         res.redirect("/profile");
@@ -131,6 +116,7 @@ app.get("/login", requireLoggedOutUser, (req, res) => {
 //POST Log In
 app.post("/login", requireLoggedOutUser, (req, res) => {
     const { email, password } = req.body;
+
     db.LogIn(email, password)
         .then((hash) => {
             if (compare(password, hash.rows[0].password)) {
@@ -139,14 +125,8 @@ app.post("/login", requireLoggedOutUser, (req, res) => {
                     .then((result) => {
                         req.session.id = result.rows[0].id;
                         db.getUserSignature(result.rows[0].id)
-                            .then((result) => {
-                                if (result.rows[0] !== undefined) {
-                                    console.log(result.rows[0]);
-                                    req.session.signed = true;
-                                    res.redirect("/thanks");
-                                } else {
-                                    res.redirect("/petition");
-                                }
+                            .then(() => {
+                                res.redirect("/thanks");
                             })
                             .catch((err) => {
                                 console.log(
@@ -186,8 +166,7 @@ app.get("/profile", requireLoggedInUser, (req, res) => {
 app.post("/profile", requireLoggedInUser, (req, res) => {
     if (
         req.body.website.startsWith("http") ||
-        req.body.website.startsWith("https") ||
-        req.body.website == " "
+        req.body.website.startsWith("https")
     ) {
         let age = req.body.age;
         let city = req.body.city;
@@ -196,11 +175,7 @@ app.post("/profile", requireLoggedInUser, (req, res) => {
 
         db.addUserData(age, city, url, id)
             .then(() => {
-                if (req.session.signed != true) {
-                    res.redirect("/petition");
-                } else {
-                    res.redirect("/thanks");
-                }
+                res.redirect("/petition");
             })
             .catch((err) => {
                 console.log("error in db.addUserData and getCount", err);
@@ -212,7 +187,7 @@ app.post("/profile", requireLoggedInUser, (req, res) => {
 });
 
 //GET /thanks
-app.get("/thanks", requireLoggedInUser, requireSignedPetition, (req, res) => {
+app.get("/thanks", requireSignedPetition, (req, res) => {
     db.getCount()
         .then((result) => {
             let countOfUsers = result.rows[0].count;
@@ -238,6 +213,8 @@ app.get("/thanks", requireLoggedInUser, requireSignedPetition, (req, res) => {
 //GET edit
 app.get("/edit", requireLoggedInUser, (req, res) => {
     db.getSpecificUser(req.session.id).then(({ rows }) => {
+        console.log(req.session.id);
+        console.log(rows);
         res.render("editPage", {
             layout: "main",
             rows,
@@ -282,27 +259,22 @@ app.post("/edit", requireLoggedInUser, (req, res) => {
 });
 
 // POST delete signature
-delete app.post(
-    "/delete",
-    requireLoggedInUser,
-    requireSignedPetition,
-    (req, res) => {
-        console.log("delete signature");
-        let id = req.session.id;
+delete app.post("/delete", (req, res) => {
+    console.log("delete signature");
+    let id = req.session.id;
 
-        db.deleteSignature(id)
-            .then(() => {
-                req.session.signed = null;
-                res.redirect("/thanks");
-            })
-            .catch((err) => {
-                console.log("error in delete signature", err);
-            });
-    }
-);
+    db.deleteSignature(id)
+        .then(() => {
+            req.session.signed = null;
+            res.redirect("/petition");
+        })
+        .catch((err) => {
+            console.log("error in delete signature", err);
+        });
+});
 
 //GET /signers
-app.get("/signers", requireLoggedInUser, requireSignedPetition, (req, res) => {
+app.get("/signers", requireSignedPetition, (req, res) => {
     db.getUsers()
         .then(({ rows }) => {
             res.render("signersPage", {
@@ -316,24 +288,19 @@ app.get("/signers", requireLoggedInUser, requireSignedPetition, (req, res) => {
 });
 
 //GET /signers/:city
-app.get(
-    "/signers/:city",
-    requireLoggedInUser,
-    requireSignedPetition,
-    (req, res) => {
-        let city = req.params.city;
-        db.getUserFromCity(city)
-            .then(({ rows }) => {
-                res.render("signersCity", {
-                    layout: "main",
-                    rows,
-                });
-            })
-            .catch((err) => {
-                console.log("error in signers db.getUsers ", err);
+app.get("/signers/:city", requireSignedPetition, (req, res) => {
+    let city = req.params.city;
+    db.getUserFromCity(city)
+        .then(({ rows }) => {
+            res.render("signersCity", {
+                layout: "main",
+                rows,
             });
-    }
-);
+        })
+        .catch((err) => {
+            console.log("error in signers db.getUsers ", err);
+        });
+});
 
 // GET "/""
 app.get("/", (req, res) => {
