@@ -7,7 +7,6 @@ body {
     font-family: "Rubik", sans-serif;
     background-color: #f55142;
     color: #2e2929;
-    border: 15px solid #2e2929;
 }
 
 span {
@@ -59,12 +58,49 @@ nav li {
 
 .teaser {
     height: 40vh;
-    background-image: url("/img/dodoheader.png");
+    width: 100%;
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
     opacity: 90%;
     margin: 10px;
+}
+
+#register {
+    background-image: url("/img/dodoheader.png");
+}
+
+#edit {
+    height: 55vh;
+    background-image: url("/img/2.jpg");
+}
+
+#login {
+    height: 5vh;
+}
+
+#profile {
+    height: 5vh;
+}
+
+#petition {
+    background-image: url("/img/7.png");
+}
+
+#thanks {
+    height: 5vh;
+}
+
+#signers {
+    height: 5vh;
+}
+
+#signersCity {
+    height: 5vh;
+}
+
+#info {
+    background-image: url("/img/favpng_dodo-bird-clip-art.png");
 }
 
 a {

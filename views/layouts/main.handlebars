@@ -14,24 +14,24 @@
 
         <div>   
             <img id="logo" src="/img/favpng_dodo-bird-clip-art.png" alt="dodo Logo">
-            <h2>Save the Dodo</h2>
+            <h2><a href="/register">Save the Dodo</a></h2>
+            
         </div>
 
 
         <nav>
             <ul>
-                <li><a href="#">Info</a></li>
+                <li><a href="/info">Info</a></li>
                 <li><a href="/thanks">Sign</a></li>
                 <form action="/logout" method="POST">
-                <li><button id="logBTN">Logout</button></li>
+                <li><button id="logBTN">Login/out</button></li>
                 <input type="hidden" name="_csrf" value="{{csrfToken}}"><br>
                 </form>
             </ul>
         </nav>
     </header>
 
-    <div class="teaser">
-    </div>
+
 
     <div class="container">
         {{{body}}}

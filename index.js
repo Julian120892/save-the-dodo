@@ -116,7 +116,7 @@ app.get("/login", requireLoggedOutUser, (req, res) => {
 //POST Log In
 app.post("/login", requireLoggedOutUser, (req, res) => {
     const { email, password } = req.body;
-
+    console.log(email);
     db.LogIn(email, password)
         .then((hash) => {
             if (compare(password, hash.rows[0].password)) {
@@ -173,7 +173,7 @@ app.post("/profile", requireLoggedInUser, (req, res) => {
         let url = req.body.website;
         let id = req.session.id;
 
-        db.addUserData(age, city, url, id)
+        db.addUserData(age, city.toLowerCase(), url, id)
             .then(() => {
                 res.redirect("/petition");
             })
@@ -249,7 +249,7 @@ app.post("/edit", requireLoggedInUser, (req, res) => {
             console.log("error in signers db.getUsers ", err);
         });
     }
-    db.updateUserProfile(age, city, website, id)
+    db.updateUserProfile(age, city.toLowerCase(), website, id)
         .catch((err) => {
             console.log("error in db.updateUserProfile ", err);
         })
@@ -305,6 +305,13 @@ app.get("/signers/:city", requireSignedPetition, (req, res) => {
 // GET "/""
 app.get("/", (req, res) => {
     res.redirect("/register");
+});
+
+//GET "/info"
+app.get("/info", (req, res) => {
+    res.render("infoPage", {
+        layout: "main",
+    });
 });
 
 //start server
