@@ -18,7 +18,7 @@ and clone Dodo Birds back to life.</span>
       <canvas id="signCanvas" width="350" height="100"></canvas>
       <input type="hidden" id="hiddenSig" name="hiddenSig"><br>
 
-  <p id="warning"><span>Something went wrong or you haven't filled out all the forms, please try a diffrent Name!</span></p>    
+  <p id="warning" {{#if errorMessage}}class="visible"{{/if}}><span>Something went wrong, please try agin!</span></p>    
     <button id="submitBTN">Sign Now!</button>
       <input type="hidden" name="_csrf" value="{{csrfToken}}"><br>
 </form>

@@ -17,19 +17,19 @@ and clone Dodo Birds back to life.</span>
 <h2>Please register to support us:</h2>
 <br>
 <br>
-  <h4>First Name</h4>
-  <input type="text" id="firstName" name="firstName" placeholder="First Name" pattern="[a-zA-Z]+" title="No Numbers allowed"><br>
-   <h4>Last Name</h4>
-  <input type="text" id="lastName" name="lastName" placeholder="Last Name" pattern="[a-zA-Z]+" title="No Numbers allowed"><br>
+  <h4>First Name*</h4>
+  <input type="text" id="firstName" name="firstName" placeholder="First Name" pattern="[a-zA-Z]+" title="No Numbers allowed" required><br>
+   <h4>Last Name*</h4>
+  <input type="text" id="lastName" name="lastName" placeholder="Last Name" pattern="[a-zA-Z]+" title="No Numbers allowed" required><br>
   <br>
-  <h4>Your Email Adress</h4>
-  <input type="email" id="email" name="email" placeholder="Em@il"><br>
-  <h4>Your password</h4>
-<input type="password" id="password" name="password" placeholder="Enter a Password"> <!--pattern='(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"' title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"-->
+  <h4>Your Email Adress*</h4>
+  <input type="email" id="email" name="email" placeholder="Em@il" required><br>
+  <h4>Your password*</h4>
+<input type="password" id="password" name="password" placeholder="Enter a Password" required> <!--pattern='(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"' title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"-->
   <br>
       
 
-  <p id="warning"><span>Something went wrong or you haven't filled out all the forms, please try a diffrent Name!</span></p>    
+  <p id="warning" {{#if errorMessage}}class="visible"{{/if}}><span>Something went wrong or you haven't filled out all the forms, please try a diffrent Name!</span></p>    
     <button id="submitBTN">Sign Now!</button>
           <input type="hidden" name="_csrf" value="{{csrfToken}}"><br>
 

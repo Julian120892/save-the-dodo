@@ -9,13 +9,16 @@
 <br>
 <form method="POST" action="/logIn">
   <h4>Your Email Adress</h4>
-  <input type="text" id="email" name="email" placeholder="Your Em@il"><br>
+  <input type="text" id="email" name="email" placeholder="Your Em@il" required><br>
   <h4>Your password</h4>
-<input type="password" id="password" name="password" placeholder="Enter your Password">
+<input type="password" id="password" name="password" placeholder="Enter your Password" required>
   <br>
       
 
-  <p id="warning"><span>Your Email Adress or Password was wrong, please try again.</span></p>    
+  <p id="warning" {{#if errorMessage}}class="visible"{{/if}} ><span>Your Email Adress or Password was wrong, please try again.<br><br></span></p>    
+
+  
+    
     <button id="submitBTN">Sign In</button>
           <input type="hidden" name="_csrf" value="{{csrfToken}}"><br>
 

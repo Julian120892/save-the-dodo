@@ -62,6 +62,10 @@ app.post("/petition", (req, res) => {
             })
             .catch((err) => {
                 console.log("error in db.addUserSig", err);
+                res.render("petitionPage", {
+                    layout: "main",
+                    errorMessage: true,
+                });
             });
     }
 });
@@ -99,6 +103,10 @@ app.post(
                     })
                     .catch((err) => {
                         console.log("error in db.register", err);
+                        res.render("registerPage", {
+                            layout: "main",
+                            errorMessage: true,
+                        });
                         //if insert fails, re-render template with an error message!!!!!!!
                     });
             });
@@ -116,7 +124,6 @@ app.get("/login", requireLoggedOutUser, (req, res) => {
 //POST Log In
 app.post("/login", requireLoggedOutUser, (req, res) => {
     const { email, password } = req.body;
-    console.log(email);
     db.LogIn(email, password)
         .then((hash) => {
             if (compare(password, hash.rows[0].password)) {
@@ -145,6 +152,10 @@ app.post("/login", requireLoggedOutUser, (req, res) => {
         })
         .catch((err) => {
             console.log("error in db.login", err);
+            res.render("logInPage", {
+                layout: "main",
+                errorMessage: true,
+            });
         });
 });
 
@@ -164,26 +175,30 @@ app.get("/profile", requireLoggedInUser, (req, res) => {
 
 //POST profile
 app.post("/profile", requireLoggedInUser, (req, res) => {
+    let age;
+    let city = req.body.city;
+    let id = req.session.id;
+    let url;
     if (
         req.body.website.startsWith("http") ||
         req.body.website.startsWith("https")
     ) {
-        let age = req.body.age;
-        let city = req.body.city;
-        let url = req.body.website;
-        let id = req.session.id;
-
-        db.addUserData(age, city.toLowerCase(), url, id)
-            .then(() => {
-                res.redirect("/petition");
-            })
-            .catch((err) => {
-                console.log("error in db.addUserData and getCount", err);
-            });
-    } else {
-        console.log("no website");
-        //db add error
+        url = req.body.website;
+    } else if (req.body.website.startsWith("www")) {
+        url = req.body.website.replace("www", "http");
     }
+
+    if (req.body.age) {
+        age = req.body.age;
+    }
+
+    db.addUserData(age, city.toLowerCase(), url, id)
+        .then(() => {
+            res.redirect("/petition");
+        })
+        .catch((err) => {
+            console.log("error in db.addUserData and getCount", err);
+        });
 });
 
 //GET /thanks
@@ -223,15 +238,7 @@ app.get("/edit", requireLoggedInUser, (req, res) => {
 });
 
 app.post("/edit", requireLoggedInUser, (req, res) => {
-    const {
-        firstName,
-        lastName,
-        email,
-        password,
-        age,
-        city,
-        website,
-    } = req.body;
+    let { firstName, lastName, email, password, age, city, website } = req.body;
     const id = req.session.id;
 
     if (password != "") {
@@ -249,6 +256,16 @@ app.post("/edit", requireLoggedInUser, (req, res) => {
             console.log("error in signers db.getUsers ", err);
         });
     }
+
+    if (
+        req.body.website.startsWith("http") ||
+        req.body.website.startsWith("https")
+    ) {
+        website = req.body.website;
+    } else if (req.body.website.startsWith("www")) {
+        website = req.body.website.replace("www", "http");
+    }
+
     db.updateUserProfile(age, city.toLowerCase(), website, id)
         .catch((err) => {
             console.log("error in db.updateUserProfile ", err);
