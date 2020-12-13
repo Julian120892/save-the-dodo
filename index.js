@@ -47,13 +47,11 @@ app.get("/petition", (req, res) => {
 //POST /petition
 app.post("/petition", (req, res) => {
     let user_id = req.session.id;
-    console.log("id: ", user_id);
 
     const { hiddenSig } = req.body;
     if (hiddenSig == "") {
         return;
     } else {
-        console.log("id: ", user_id);
         db.addUserSig(hiddenSig, user_id)
             .then(() => {
                 console.log("added to DB");
@@ -96,7 +94,6 @@ app.post(
             hash(password).then((hash) => {
                 db.newUser(firstName, lastName, email, hash)
                     .then((id) => {
-                        console.log("added User to Data Base", id.rows[0].id);
                         req.session.id = id.rows[0].id;
                         req.session.signed = true;
                         res.redirect("/profile");
@@ -228,8 +225,6 @@ app.get("/thanks", requireSignedPetition, (req, res) => {
 //GET edit
 app.get("/edit", requireLoggedInUser, (req, res) => {
     db.getSpecificUser(req.session.id).then(({ rows }) => {
-        console.log(req.session.id);
-        console.log(rows);
         res.render("editPage", {
             layout: "main",
             rows,
