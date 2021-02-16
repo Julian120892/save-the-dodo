@@ -13,12 +13,14 @@ This petition lets users sign for this very purpose and shows the signers who el
 
 ### Login and Registration
 Users must first register and can log in again at a later time, for example, to retrieve their signature.
-
-### Edit Profile
-A profile can be edited after it has been created. Also password and email can be changed afterwards.
+![](dodo_1.gif)
 
 ### E-Signature
 A canvas element allows users to sign directly with the mouse.
 
 ### Filtering signers
 After signing the users have the option to see who else has signed. By clicking on the associated city, you can see who has signed from the same place.
+
+### Edit Profile
+A profile can be edited after it has been created. Also password and email can be changed afterwards.
+![](dodo_2.gif)
